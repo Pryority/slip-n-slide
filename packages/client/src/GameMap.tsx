@@ -10,7 +10,8 @@ type Props = {
   terrain?: {
     x: number;
     y: number;
-    emoji: string;
+    emoji?: string;
+    bgColor?: string;
   }[];
   players?: {
     x: number;
@@ -44,75 +45,84 @@ export const GameMap = ({
     }
   }, [encounter]);
 
-  return (
-    <div className="inline-grid p-2 bg-lime-500 relative overflow-hidden">
-      {rows.map((y) =>
-        columns.map((x) => {
-          const terrainEmoji = terrain?.find(
-            (t) => t.x === x && t.y === y
-          )?.emoji;
 
-          const playersHere = players?.filter((p) => p.x === x && p.y === y);
-          const mainPlayerHere = playersHere?.find(
-            (p) => p.entity === playerEntity
-          );
+  const r = rows.map((y) =>
+    columns.map((x) => {
+      const terrainEmoji = terrain?.find(
+        (t) => t.x === x && t.y === y
+      )?.emoji;
 
-          return (
-            <div
-              key={`${x},${y}`}
-              className={twMerge(
-                "w-8 h-8 flex items-center justify-center",
-                onTileClick ? "cursor-pointer hover:ring" : null
-              )}
-              style={{
-                gridColumn: x + 1,
-                gridRow: y + 1,
-              }}
-              onClick={() => {
-                onTileClick?.(x, y);
-              }}
-            >
-              {encounter && mainPlayerHere ? (
-                <div
-                  className="absolute z-10 animate-battle"
-                  style={{
-                    boxShadow: "0 0 0 100vmax black",
-                  }}
-                  onAnimationEnd={() => {
-                    setShowEncounter(true);
-                  }}
-                ></div>
-              ) : null}
-              <div className="flex flex-wrap gap-1 items-center justify-center relative">
-                {terrainEmoji ? (
-                  <div className="absolute inset-0 flex items-center justify-center text-3xl pointer-events-none">
-                    {terrainEmoji}
-                  </div>
-                ) : null}
-                <div className="relative">
-                  {playersHere?.map((p) => (
-                    <span key={p.entity}>{p.emoji}</span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          );
-        })
-      )}
+      const waterTerrain = terrain?.find(
+        (t) => t.x === x && t.y === y
+      )?.bgColor;
 
-      {encounter && showEncounter ? (
+      const playersHere = players?.filter((p) => p.x === x && p.y === y);
+      const mainPlayerHere = playersHere?.find(
+        (p) => p.entity === playerEntity
+      );
+
+      if (waterTerrain)
+        return (
+          <div key={`${x},${y}`} className="bg-blue-500">
+          </div>
+        )
+      else return (
         <div
-          className="relative z-10 -m-2 bg-black text-white flex items-center justify-center"
+          key={`${x},${y}`}
+          className={twMerge(
+            "w-8 h-8 flex items-center justify-center",
+            onTileClick ? "cursor-pointer hover:ring" : null
+          )}
           style={{
-            gridColumnStart: 1,
-            gridColumnEnd: width + 1,
-            gridRowStart: 1,
-            gridRowEnd: height + 1,
+            gridColumn: x + 1,
+            gridRow: y + 1,
+          }}
+          onClick={() => {
+            onTileClick?.(x, y);
           }}
         >
-          {encounter}
+          {encounter && mainPlayerHere ? (
+            <div
+              className="absolute z-10 animate-battle"
+              style={{
+                boxShadow: "0 0 0 100vmax black",
+              }}
+              onAnimationEnd={() => {
+                setShowEncounter(true);
+              }}
+            ></div>
+          ) : null}
+          <div className="flex flex-wrap gap-1 items-center justify-center relative">
+            {terrainEmoji ? (
+              <div className="absolute inset-0 flex items-center justify-center text-3xl pointer-events-none">
+                {terrainEmoji}
+              </div>
+            ) : null}
+            <div className="relative">
+              {playersHere?.map((p) => (
+                <span key={p.entity}>{p.emoji}</span>
+              ))}
+            </div>
+          </div>
         </div>
-      ) : null}
+      )
+    })
+  );
+  return (
+    encounter && showEncounter ? (
+      <div
+        className="relative z-10 -m-2 bg-black text-white flex items-center justify-center"
+        style={{
+          gridColumnStart: 1,
+          gridColumnEnd: width + 1,
+          gridRowStart: 1,
+          gridRowEnd: height + 1,
+        }}
+      >
+        {encounter}
+      </div>
+    ) : <div className="inline-grid p-2 bg-lime-500 relative overflow-hidden">
+      {...r}
     </div>
   );
 };

@@ -41,9 +41,12 @@ export const GameBoard = () => {
   const terrain = Array.from(hexToArray(terrainData)).map((value, index) => {
     const { emoji } =
       value in TerrainType ? terrainTypes[value as TerrainType] : { emoji: "" };
+    const { bgColor } =
+      value in TerrainType ? terrainTypes[value as TerrainType] : { bgColor: "" };
     return {
       x: index % width,
       y: Math.floor(index / width),
+      bgColor,
       emoji,
     };
   });
