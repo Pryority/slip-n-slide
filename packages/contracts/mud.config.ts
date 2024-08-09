@@ -5,7 +5,7 @@ export default defineWorld({
     Direction: ["North", "East", "South", "West"],
     MonsterCatchResult: ["Missed", "Caught", "Fled"],
     MonsterType: ["None", "Eagle", "Rat", "Caterpillar"],
-    TerrainType: ["None", "TallGrass", "Boulder"],
+    TerrainType: ["None", "TallGrass", "Boulder", "Water"],
   },
   tables: {
     Encounter: {
