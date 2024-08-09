@@ -25,5 +25,6 @@ enum MonsterType {
 enum TerrainType {
   None,
   TallGrass,
-  Boulder
+  Boulder,
+  Water
 }
