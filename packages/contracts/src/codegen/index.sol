@@ -10,3 +10,5 @@ import { Obstruction } from "./tables/Obstruction.sol";
 import { OwnedBy } from "./tables/OwnedBy.sol";
 import { Player } from "./tables/Player.sol";
 import { Position } from "./tables/Position.sol";
+import { StartTile } from "./tables/StartTile.sol";
+import { EndTile } from "./tables/EndTile.sol";
