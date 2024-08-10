@@ -6,10 +6,13 @@ import { hexToArray } from "@latticexyz/utils";
 import { TerrainType, terrainTypes } from "./terrainTypes";
 import { singletonEntity } from "@latticexyz/store-sync/recs";
 import { Has, getComponentValueStrict } from "@latticexyz/recs";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { Direction } from "./direction";
 
 export const GameBoard = ({ onWinGame }: { onWinGame: () => void }) => {
-  useKeyboardMovement();
+  const [direction, setDirection] = useState<Direction>(Direction.East);
+
+  useKeyboardMovement(setDirection);
 
   const {
     components: { MapConfig, Player, Position },
@@ -35,7 +38,6 @@ export const GameBoard = ({ onWinGame }: { onWinGame: () => void }) => {
 
   const { width, height, terrain: terrainData } = mapConfig;
   const terrainArray = Array.from(hexToArray(terrainData));
-  // console.log("Decoded terrain array:", terrainArray);
 
   const terrain = terrainArray.map((value, index) => {
     const terrainType = value as TerrainType;
@@ -66,10 +68,11 @@ export const GameBoard = ({ onWinGame }: { onWinGame: () => void }) => {
 
   return (
     <GameMap
+      direction={direction}
       width={width}
       height={height}
       terrain={terrain}
-      players={players} // Pass the updated players array
+      players={players}
     />
   );
 };
