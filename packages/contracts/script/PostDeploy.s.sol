@@ -63,6 +63,14 @@ contract PostDeploy is Script {
           Position.set(entity, int32(x), int32(y));
           Slippery.set(entity, true);
         }
+
+        // if (x == 0 && y == 0) {
+        //   Position.set(entity, int32(x), int32(y));
+        //   StartTile.set(entity, true);
+        // } else if (x == width - 1 && y == height - 1) {
+        //   Position.set(entity, int32(x), int32(y));
+        //   EndTile.set(entity, true);
+        // }
       }
     }
 
