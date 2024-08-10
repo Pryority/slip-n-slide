@@ -3,12 +3,13 @@ import { uuid } from "@latticexyz/utils";
 import { ClientComponents } from "./createClientComponents";
 import { SetupNetworkResult } from "./setupNetwork";
 import { Direction } from "../direction";
+import { singletonEntity } from "@latticexyz/store-sync/recs";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
   { playerEntity, worldContract, waitForTransaction }: SetupNetworkResult,
-  { Obstruction, Player, Position, Slippery }: ClientComponents,
+  { MapConfig, Obstruction, Player, Position, Slippery }: ClientComponents,
 ) {
   // const wrapPosition = (x: number, y: number) => {
   //   const mapConfig = getComponentValue(MapConfig, singletonEntity);
@@ -50,25 +51,44 @@ export function createSystemCalls(
       x -= 1;
     }
 
+    const mapConfig = getComponentValue(MapConfig, singletonEntity);
+    if (!mapConfig) {
+      throw new Error("mapConfig not yet loaded or initialized");
+    }
+
+    const { width: mapWidth, height: mapHeight } = mapConfig;
+
+    if (x < 0 || x >= mapWidth || y < 0 || y >= mapHeight) {
+      console.error("cannot move out of map boundaries");
+      return;
+    }
+
     if (isObstructed(x, y)) {
       console.warn("cannot move to obstructed space");
       return;
     }
 
     if (isSlippery(x, y)) {
-      console.warn("🥶 Stepped on Slippery tile!");
+      console.log("🥶 BRRRRR!!! SLIPPERY ICE");
 
       // Handle slippery tiles
       while (isSlippery(x, y)) {
         let nextX = x;
         let nextY = y;
+
         if (direction === Direction.North) nextY--;
         else if (direction === Direction.East) nextX++;
         else if (direction === Direction.South) nextY++;
         else if (direction === Direction.West) nextX--;
 
+        if (nextX < 0 || nextX >= mapWidth || nextY < 0 || nextY >= mapHeight) {
+          console.warn("⚠️ CANNOT SLIDE OFF MAP BOUNDARIES");
+          break; // Stop sliding/moving at the last tile before going off the map boundaries
+        }
+
         if (isObstructed(nextX, nextY)) {
-          break; // Stop at the last slippery tile before an obstruction
+          console.warn("⚠️ CANNOT MOVE INTO OBSTRUCTION");
+          break; // Stop sliding/moving at the last slippery tile before an obstruction
         }
 
         console.log(`🧊 Sliding on ice at - x:${x}, y: ${y}`);
