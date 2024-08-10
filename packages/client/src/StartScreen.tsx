@@ -9,7 +9,7 @@ export default function StartScreen({ onStartGame }: Props) {
     <div className="flex flex-col min-h-screen w-full bg-[#1e1e1e] z-50 items-center justify-center space-y-8">
       <div
         className={
-          "h-96 w-96 absolute right-1/4 flex z-[-1] opacity-25 animate-bounce"
+          "h-96 w-96 absolute right-40 flex z-[-1] opacity-25 animate-bounce"
         }
       >
         <img src="/pudgy.png" alt="Player" className="object-cover" />
@@ -31,7 +31,7 @@ export default function StartScreen({ onStartGame }: Props) {
       </div>
       <button
         onClick={onStartGame}
-        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        className="px-7 py-3 text-xl bg-blue-500 text-white rounded hover:bg-blue-600"
       >
         Start Game
       </button>
