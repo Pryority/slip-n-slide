@@ -58,8 +58,7 @@ export function createSystemCalls(
     }
 
     if (isSlippery(x, y)) {
-      console.warn("slippery tile!");
-      // return;
+      console.warn("🥶 Stepped on Slippery tile!");
 
       // Handle slippery tiles
       while (isSlippery(x, y)) {
@@ -76,7 +75,7 @@ export function createSystemCalls(
           break; // Stop at the last slippery tile before an obstruction
         }
 
-        console.log(`Slipping on ice tile - x:${x}, y: ${y}`);
+        console.log(`🧊 Sliding on ice at - x:${x}, y: ${y}`);
         x = nextX;
         y = nextY;
       }
@@ -124,7 +123,8 @@ export function createSystemCalls(
     });
 
     try {
-      const tx = await worldContract.write.spawn([x, y]);
+      // const tx = await worldContract.write.spawn([x, y]);
+      const tx = await worldContract.write.spawn([0, 0]);
       await waitForTransaction(tx);
     } finally {
       Position.removeOverride(positionId);
