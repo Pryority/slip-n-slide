@@ -1,13 +1,11 @@
 import { Entity } from "@latticexyz/recs";
 import { twMerge } from "tailwind-merge";
-// import { useMUD } from "./MUDContext";
 import { terrainTypes } from "./terrainTypes";
 import { getTerrainTypeByEmoji } from "./utils";
 
 type Props = {
   width: number;
   height: number;
-  onTileClick?: (x: number, y: number) => void;
   terrain?: {
     x: number;
     y: number;
@@ -22,15 +20,7 @@ type Props = {
   }[];
 };
 
-export const GameMap = ({
-  width,
-  height,
-  onTileClick,
-  terrain,
-  players,
-}: Props) => {
-  console.log("Raw terrain data:", terrain);
-
+export const GameMap = ({ width, height, terrain, players }: Props) => {
   const rows = new Array(width).fill(0).map((_, i) => i);
   const columns = new Array(height).fill(0).map((_, i) => i);
 
@@ -42,28 +32,21 @@ export const GameMap = ({
         bgColor: "bg-gray-500",
         emoji: "❓",
       };
-
       const playersHere = players?.filter((p) => p.x === x && p.y === y);
-
       const tileBgColor = terrainConfig.bgColor;
       const tileBgImage = terrainConfig.bgImage;
-
       return (
         <div
           key={`${x},${y}`}
           className={twMerge(
             "w-8 h-8 flex items-center justify-center",
             tileBgColor,
-            onTileClick ? "cursor-pointer hover:ring" : null,
           )}
           style={{
             gridColumn: x + 1,
             gridRow: y + 1,
             backgroundImage: tileBgImage ? tileBgImage : undefined,
             backgroundSize: "cover",
-          }}
-          onClick={() => {
-            onTileClick?.(x, y);
           }}
         >
           <div className="flex flex-wrap gap-1 items-center justify-center relative">
