@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useComponentValue } from "@latticexyz/react";
 import { SyncStep } from "@latticexyz/store-sync";
 import { singletonEntity } from "@latticexyz/store-sync/recs";
 import { useMUD } from "./MUDContext";
 import { GameBoard } from "./GameBoard";
-import WinningScreen from "./WinningScreen"; // Import WinningScreen
+import WinningScreen from "./WinningScreen";
 import StartScreen from "./StartScreen";
 
 export const App = () => {
