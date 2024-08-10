@@ -123,8 +123,41 @@ export function createSystemCalls(
     });
 
     try {
-      // const tx = await worldContract.write.spawn([x, y]);
-      const tx = await worldContract.write.spawn([0, 0]);
+      const tx = await worldContract.write.spawn([x, y]);
+      await waitForTransaction(tx);
+    } finally {
+      Position.removeOverride(positionId);
+      Player.removeOverride(playerId);
+    }
+  };
+
+  const respawn = async (inputX: number, inputY: number) => {
+    if (!playerEntity) {
+      throw new Error("no player");
+    }
+
+    const canSpawn = getComponentValue(Player, playerEntity)?.value !== true;
+    if (canSpawn) throw new Error("Not yet spawned");
+
+    const [x, y] = wrapPosition(inputX, inputY);
+    if (isObstructed(x, y)) {
+      console.warn("cannot spawn on obstructed space");
+      return;
+    }
+
+    const positionId = uuid();
+    Position.addOverride(positionId, {
+      entity: playerEntity,
+      value: { x, y },
+    });
+    const playerId = uuid();
+    Player.addOverride(playerId, {
+      entity: playerEntity,
+      value: { value: true },
+    });
+
+    try {
+      const tx = await worldContract.write.respawn([x, y]);
       await waitForTransaction(tx);
     } finally {
       Position.removeOverride(positionId);
@@ -135,5 +168,6 @@ export function createSystemCalls(
   return {
     move,
     spawn,
+    respawn,
   };
 }
