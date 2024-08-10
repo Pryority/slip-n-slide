@@ -40,18 +40,17 @@ export function createSystemCalls(
       return;
     }
 
-    let { x: inputX, y: inputY } = position;
+    let { x, y } = position;
     if (direction === Direction.North) {
-      inputY -= 1;
+      y -= 1;
     } else if (direction === Direction.East) {
-      inputX += 1;
+      x += 1;
     } else if (direction === Direction.South) {
-      inputY += 1;
+      y += 1;
     } else if (direction === Direction.West) {
-      inputX -= 1;
+      x -= 1;
     }
 
-    let [x, y] = wrapPosition(inputX, inputY);
     if (isObstructed(x, y)) {
       console.warn("cannot move to obstructed space");
       return;
@@ -68,8 +67,6 @@ export function createSystemCalls(
         else if (direction === Direction.East) nextX++;
         else if (direction === Direction.South) nextY++;
         else if (direction === Direction.West) nextX--;
-
-        [nextX, nextY] = wrapPosition(nextX, nextY);
 
         if (isObstructed(nextX, nextY)) {
           break; // Stop at the last slippery tile before an obstruction
