@@ -5,6 +5,7 @@ import { singletonEntity } from "@latticexyz/store-sync/recs";
 import { useMUD } from "./MUDContext";
 import { GameBoard } from "./GameBoard";
 import WinningScreen from "./WinningScreen"; // Import WinningScreen
+import StartScreen from "./StartScreen";
 
 export const App = () => {
   const {
@@ -48,9 +49,7 @@ export const App = () => {
       ) : hasWon ? (
         <WinningScreen onRestartGame={handleRestartGame} />
       ) : !gameStarted ? (
-        <div>
-          <button onClick={handleStartGame}>Start Game</button>
-        </div>
+        <StartScreen onStartGame={handleStartGame} />
       ) : (
         <GameBoard onWinGame={handleWinGame} />
       )}
