@@ -8,6 +8,13 @@ import { addressToEntityKey } from "../addressToEntityKey.sol";
 import { positionToEntityKey } from "../positionToEntityKey.sol";
 
 contract MapSystem is System {
+  function respawn(int32 x, int32 y) public {
+    bytes32 player = addressToEntityKey(address(_msgSender()));
+    require(Player.get(player), "Player not spawned");
+    // Reset player position
+    Position.set(player, x, y);
+  }
+
   function spawn(int32 x, int32 y) public {
     bytes32 player = addressToEntityKey(address(_msgSender()));
     require(!Player.get(player), "already spawned");
