@@ -6,7 +6,7 @@
 
 ### In-Game Screen
 
-![DEMO](./packages/client/public/map-demo.png)
+![DEMO](./packages/client/public/map-screen.png)
 
 ### Starting Screen
 
