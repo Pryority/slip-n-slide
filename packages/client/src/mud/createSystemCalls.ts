@@ -4,20 +4,12 @@ import { uuid } from "@latticexyz/utils";
 import { ClientComponents } from "./createClientComponents";
 import { SetupNetworkResult } from "./setupNetwork";
 import { Direction } from "../direction";
-import { MonsterCatchResult } from "../monsterCatchResult";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
   { playerEntity, worldContract, waitForTransaction }: SetupNetworkResult,
-  {
-    Encounter,
-    MapConfig,
-    MonsterCatchAttempt,
-    Obstruction,
-    Player,
-    Position,
-  }: ClientComponents
+  { MapConfig, Obstruction, Player, Position, Slippery }: ClientComponents,
 ) {
   const wrapPosition = (x: number, y: number) => {
     const mapConfig = getComponentValue(MapConfig, singletonEntity);
@@ -34,6 +26,9 @@ export function createSystemCalls(
     return runQuery([Has(Obstruction), HasValue(Position, { x, y })]).size > 0;
   };
 
+  const isSlippery = (x: number, y: number) => {
+    return runQuery([Has(Slippery), HasValue(Position, { x, y })]).size > 0;
+  };
   const move = async (direction: Direction) => {
     if (!playerEntity) {
       throw new Error("no player");
@@ -42,12 +37,6 @@ export function createSystemCalls(
     const position = getComponentValue(Position, playerEntity);
     if (!position) {
       console.warn("cannot move without a player position, not yet spawned?");
-      return;
-    }
-
-    const inEncounter = !!getComponentValue(Encounter, playerEntity);
-    if (inEncounter) {
-      console.warn("cannot move while in encounter");
       return;
     }
 
@@ -62,10 +51,35 @@ export function createSystemCalls(
       inputX -= 1;
     }
 
-    const [x, y] = wrapPosition(inputX, inputY);
+    let [x, y] = wrapPosition(inputX, inputY);
     if (isObstructed(x, y)) {
       console.warn("cannot move to obstructed space");
       return;
+    }
+
+    if (isSlippery(x, y)) {
+      console.warn("slippery tile!");
+      // return;
+
+      // Handle slippery tiles
+      while (isSlippery(x, y)) {
+        let nextX = x;
+        let nextY = y;
+        if (direction === Direction.North) nextY--;
+        else if (direction === Direction.East) nextX++;
+        else if (direction === Direction.South) nextY++;
+        else if (direction === Direction.West) nextX--;
+
+        [nextX, nextY] = wrapPosition(nextX, nextY);
+
+        if (isObstructed(nextX, nextY)) {
+          break; // Stop at the last slippery tile before an obstruction
+        }
+
+        console.log(`Slipping on ice tile - x:${x}, y: ${y}`);
+        x = nextX;
+        y = nextY;
+      }
     }
 
     const positionId = uuid();
@@ -118,37 +132,8 @@ export function createSystemCalls(
     }
   };
 
-  const throwBall = async () => {
-    const player = playerEntity;
-    if (!player) {
-      throw new Error("no player");
-    }
-
-    const encounter = getComponentValue(Encounter, player);
-    if (!encounter) {
-      throw new Error("no encounter");
-    }
-
-    const tx = await worldContract.write.throwBall();
-    await waitForTransaction(tx);
-
-    const catchAttempt = getComponentValue(MonsterCatchAttempt, player);
-    if (!catchAttempt) {
-      throw new Error("no catch attempt found");
-    }
-
-    return catchAttempt.result as MonsterCatchResult;
-  };
-
-  const fleeEncounter = async () => {
-    const tx = await worldContract.write.flee();
-    await waitForTransaction(tx);
-  };
-
   return {
     move,
     spawn,
-    throwBall,
-    fleeEncounter,
   };
 }

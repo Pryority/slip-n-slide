@@ -1,5 +1,8 @@
 {
-  "name": "emojimon",
+  "name": "slip-n-slide",
+  "author": {
+    "name": "Matthew Pryor"
+  },
   "private": true,
   "scripts": {
     "build": "pnpm recursive run build",

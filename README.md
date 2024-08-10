@@ -1,4 +1,4 @@
-# Emojimon
+# Slip-n-Slide
 
 > Create a Pokémon-inspired on-chain game with [MUD](https://mud.dev/)
 

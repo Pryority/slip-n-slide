@@ -9,22 +9,9 @@ enum Direction {
   West
 }
 
-enum MonsterCatchResult {
-  Missed,
-  Caught,
-  Fled
-}
-
-enum MonsterType {
-  None,
-  Eagle,
-  Rat,
-  Caterpillar
-}
-
 enum TerrainType {
   None,
-  TallGrass,
+  Snow,
   Boulder,
-  Water
+  Ice
 }
