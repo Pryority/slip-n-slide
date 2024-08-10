@@ -1,9 +1,11 @@
 import { Entity } from "@latticexyz/recs";
 import { twMerge } from "tailwind-merge";
 import { terrainTypes } from "./terrainTypes";
-import { getTerrainTypeByEmoji } from "./utils";
+import { getAngle, getTerrainTypeByEmoji } from "./utils";
+import { Direction } from "./direction";
 
 type Props = {
+  direction: Direction;
   width: number;
   height: number;
   terrain?: {
@@ -20,7 +22,13 @@ type Props = {
   }[];
 };
 
-export const GameMap = ({ width, height, terrain, players }: Props) => {
+export const GameMap = ({
+  direction,
+  width,
+  height,
+  terrain,
+  players,
+}: Props) => {
   const rows = new Array(width).fill(0).map((_, i) => i);
   const columns = new Array(height).fill(0).map((_, i) => i);
 
@@ -35,6 +43,7 @@ export const GameMap = ({ width, height, terrain, players }: Props) => {
       const playersHere = players?.filter((p) => p.x === x && p.y === y);
       const tileBgColor = terrainConfig.bgColor;
       const tileBgImage = terrainConfig.bgImage;
+
       return (
         <div
           key={`${x},${y}`}
@@ -60,7 +69,14 @@ export const GameMap = ({ width, height, terrain, players }: Props) => {
               </div>
             ) : null}
             <div className="relative">
-              {playersHere?.map((p) => <span key={p.entity}>{p.emoji}</span>)}
+              {playersHere?.map((p) => (
+                <span
+                  key={p.entity}
+                  className={twMerge("h-8 w-8 flex z-50", getAngle(direction))}
+                >
+                  <img src="/pudgy.png" alt="Player" className="object-cover" />
+                </span>
+              ))}
             </div>
           </div>
         </div>
