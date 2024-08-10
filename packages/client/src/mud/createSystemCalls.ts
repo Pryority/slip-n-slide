@@ -4,6 +4,7 @@ import { ClientComponents } from "./createClientComponents";
 import { SetupNetworkResult } from "./setupNetwork";
 import { Direction } from "../direction";
 import { singletonEntity } from "@latticexyz/store-sync/recs";
+import { Dispatch, SetStateAction } from "react";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
@@ -29,7 +30,12 @@ export function createSystemCalls(
   const isSlippery = (x: number, y: number) => {
     return runQuery([Has(Slippery), HasValue(Position, { x, y })]).size > 0;
   };
-  const move = async (direction: Direction) => {
+  const move = async (
+    setDirection: Dispatch<SetStateAction<Direction>>,
+    direction: Direction,
+  ) => {
+    setDirection(direction);
+
     if (!playerEntity) {
       throw new Error("no player");
     }
