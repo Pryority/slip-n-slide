@@ -33,5 +33,7 @@ export default defineWorld({
         dataStruct: false,
       },
     },
+    StartTile: "bool",
+    EndTile: "bool",
   },
 });
