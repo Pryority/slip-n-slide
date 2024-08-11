@@ -2,11 +2,13 @@
 
 > Made with [MUD](https://mud.dev/)
 
-## Read the tutorial on [mud.dev](https://mud.dev/tutorials/emojimon/)
+### Demo
+
+![DEMO](./packages/client/public/demo.gif)
 
 ### In-Game Screen
 
-![DEMO](./packages/client/public/map-screen.png)
+![INGAME-DEMO](./packages/client/public/map-screen.png)
 
 ### Starting Screen
 
@@ -15,7 +17,6 @@
 ### Winning Screen
 
 ![WINNING-DEMO](./packages/client/public/winning-screen.jpeg)
-
 
 ### Inspired By Pokémon
 
