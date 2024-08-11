@@ -6,9 +6,9 @@ export function getTerrainTypeByEmoji(emoji: string | undefined): TerrainType {
     case "❄️":
       return TerrainType.Snow;
     case "🪨":
-      return TerrainType.Boulder;
-    // case "🌊":
-    // return TerrainType.Water;
+      return TerrainType.Rock;
+    case "🕳️":
+      return TerrainType.Broken;
     case "🧊":
       return TerrainType.Ice;
     default:

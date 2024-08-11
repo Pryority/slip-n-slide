@@ -22,6 +22,7 @@ export const App = () => {
   });
 
   const [gameStarted, setGameStarted] = useState(false);
+  // const [complete, setComplete] = useState(false);
   const [hasWon, setHasWon] = useState(false);
 
   const handleStartGame = () => {

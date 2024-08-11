@@ -11,7 +11,7 @@ import { Direction } from "./../common.sol";
  * @dev This interface is automatically generated from the corresponding system contract. Do not edit manually.
  */
 interface IMapSystem {
-  function respawn(int32 x, int32 y) external;
+  function respawn(int32 startX, int32 startY) external;
 
   function spawn(int32 x, int32 y) external;
 

@@ -1,9 +1,9 @@
 export enum TerrainType {
   None = 0,
   Snow = 1,
-  Boulder = 2,
-  // Water = 3,
+  Rock = 2,
   Ice = 3,
+  Broken = 4,
 }
 
 type TerrainConfig = {
@@ -22,18 +22,19 @@ export const terrainTypes: Record<TerrainType, TerrainConfig> = {
     bgColor: "bg-white",
     bgImage: "url('/snow-bg.png')",
   },
-  [TerrainType.Boulder]: {
+  [TerrainType.Rock]: {
     emoji: "🪨",
     bgColor: "bg-gray-500",
     bgImage: "url('/rock-bg.png')",
   },
-  // [TerrainType.Water]: {
-  //   emoji: "🌊",
-  //   bgColor: "bg-blue-500",
-  // },
   [TerrainType.Ice]: {
     emoji: "🧊",
     bgColor: "bg-cyan-200",
-    bgImage: "url('/ice-bg.png')",
+    bgImage: "url('/thin-ice.png')",
+  },
+  [TerrainType.Broken]: {
+    emoji: "🕳️",
+    bgColor: "bg-cyan-700",
+    bgImage: "url('/hole.png')",
   },
 };

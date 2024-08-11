@@ -29,6 +29,8 @@ export const GameMap = ({
   terrain,
   players,
 }: Props) => {
+  // console.log("Raw terrain data:", terrain);
+
   const rows = new Array(width).fill(0).map((_, i) => i);
   const columns = new Array(height).fill(0).map((_, i) => i);
 
@@ -63,6 +65,7 @@ export const GameMap = ({
             terrainConfig.emoji !== "🌊" &&
             terrainConfig.emoji !== "🧊" &&
             terrainConfig.emoji !== "🪨" &&
+            terrainConfig.emoji !== "🕳️" &&
             terrainConfig.emoji !== "❄️" ? (
               <div className="absolute inset-0 flex items-center justify-center text-3xl pointer-events-none">
                 {terrainConfig.emoji}

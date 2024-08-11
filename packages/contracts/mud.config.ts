@@ -3,7 +3,7 @@ import { defineWorld } from "@latticexyz/world";
 export default defineWorld({
   enums: {
     Direction: ["North", "East", "South", "West"],
-    TerrainType: ["None", "Snow", "Boulder", "Ice"],
+    TerrainType: ["None", "Snow", "Rock", "Ice", "Broken"],
   },
   tables: {
     MapConfig: {
@@ -19,6 +19,7 @@ export default defineWorld({
     },
     Movable: "bool",
     Slippery: "bool",
+    Broken: "bool",
     Obstruction: "bool",
     OwnedBy: "bytes32",
     Player: "bool",
@@ -35,5 +36,6 @@ export default defineWorld({
     },
     StartTile: "bool",
     EndTile: "bool",
+    Completed: "bool",
   },
 });

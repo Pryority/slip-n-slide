@@ -10,19 +10,15 @@ export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
   { playerEntity, worldContract, waitForTransaction }: SetupNetworkResult,
-  { MapConfig, Obstruction, Player, Position, Slippery }: ClientComponents,
+  {
+    MapConfig,
+    Obstruction,
+    Player,
+    Position,
+    Slippery,
+    Broken,
+  }: ClientComponents,
 ) {
-  // const wrapPosition = (x: number, y: number) => {
-  //   const mapConfig = getComponentValue(MapConfig, singletonEntity);
-  //   if (!mapConfig) {
-  //     throw new Error("mapConfig no yet loaded or initialized");
-  //   }
-  //   return [
-  //     (x + mapConfig.width) % mapConfig.width,
-  //     (y + mapConfig.height) % mapConfig.height,
-  //   ];
-  // };
-
   const isObstructed = (x: number, y: number) => {
     return runQuery([Has(Obstruction), HasValue(Position, { x, y })]).size > 0;
   };
@@ -30,6 +26,10 @@ export function createSystemCalls(
   const isSlippery = (x: number, y: number) => {
     return runQuery([Has(Slippery), HasValue(Position, { x, y })]).size > 0;
   };
+  const isBroken = (x: number, y: number) => {
+    return runQuery([Has(Broken), HasValue(Position, { x, y })]).size > 0;
+  };
+
   const move = async (
     setDirection: Dispatch<SetStateAction<Direction>>,
     direction: Direction,
@@ -74,6 +74,13 @@ export function createSystemCalls(
       return;
     }
 
+    // Add this check for Broken tiles
+    if (isBroken(x, y)) {
+      console.warn("🕳️☠️ FELL THROUGH ICE!!! RESETTING GAME.");
+      respawn(0, 0);
+      return;
+    }
+
     if (isSlippery(x, y)) {
       console.log("🥶 BRRRRR!!! SLIPPERY ICE");
 
@@ -95,6 +102,12 @@ export function createSystemCalls(
         if (isObstructed(nextX, nextY)) {
           console.warn("⚠️ CANNOT MOVE INTO OBSTRUCTION");
           break; // Stop sliding/moving at the last slippery tile before an obstruction
+        }
+
+        if (isBroken(x, y)) {
+          console.warn("🕳️☠️ FELL THROUGH ICE!!! GAME OVER.");
+          respawn(0, 0);
+          break;
         }
 
         console.log(`🧊 Sliding on ice at - x:${x}, y: ${y}`);
@@ -182,6 +195,7 @@ export function createSystemCalls(
     } finally {
       Position.removeOverride(positionId);
       Player.removeOverride(playerId);
+      console.log("❤️ PLAYER RESPAWNED");
     }
   };
 

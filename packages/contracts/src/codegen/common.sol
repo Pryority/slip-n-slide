@@ -12,6 +12,7 @@ enum Direction {
 enum TerrainType {
   None,
   Snow,
-  Boulder,
-  Ice
+  Rock,
+  Ice,
+  Broken
 }

@@ -40,7 +40,10 @@ export const GameBoard = ({ onWinGame }: { onWinGame: () => void }) => {
   const terrainArray = Array.from(hexToArray(terrainData));
 
   const terrain = terrainArray.map((value, index) => {
+    // console.log("TerrainType:", value, "at index:", index);
+
     const terrainType = value as TerrainType;
+    // console.log("terrainTypes[terrainType]:", terrainTypes[terrainType]);
     const terrainConfig = terrainTypes[terrainType] || {
       bgColor: "bg-gray-500",
       emoji: "❓",
